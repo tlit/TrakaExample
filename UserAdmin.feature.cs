@@ -77,13 +77,15 @@ namespace TrakaExample
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Return pages of the User List")]
         [NUnit.Framework.CategoryAttribute("smoketest")]
+        [NUnit.Framework.CategoryAttribute("admin")]
         [NUnit.Framework.TestCaseAttribute("1", "6", "12", "2", "6", null)]
         [NUnit.Framework.TestCaseAttribute("2", "6", "12", "2", "6", null)]
         [NUnit.Framework.TestCaseAttribute("200", "6", "12", "2", "0", null)]
         public virtual void ReturnPagesOfTheUserList(string pageNumber, string perPage, string totalItems, string totalPages, string itemCount, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "smoketest"};
+                    "smoketest",
+                    "admin"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -144,13 +146,15 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Return a single User")]
         [NUnit.Framework.CategoryAttribute("smoketest")]
+        [NUnit.Framework.CategoryAttribute("admin")]
         [NUnit.Framework.TestCaseAttribute("1", "George", "Bluth", "george.bluth@reqres.in", null)]
         [NUnit.Framework.TestCaseAttribute("4", "Eve", "Holt", "eve.holt@reqres.in", null)]
         [NUnit.Framework.TestCaseAttribute("9", "Tobias", "Funke", "tobias.funke@reqres.in", null)]
         public virtual void ReturnASingleUser(string userId, string firstName, string lastName, string email, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "smoketest"};
+                    "smoketest",
+                    "admin"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -210,10 +214,12 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Attempt to return an invalid User")]
         [NUnit.Framework.CategoryAttribute("smoketest")]
+        [NUnit.Framework.CategoryAttribute("admin")]
         public virtual void AttemptToReturnAnInvalidUser()
         {
             string[] tagsOfScenario = new string[] {
-                    "smoketest"};
+                    "smoketest",
+                    "admin"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Attempt to return an invalid User", null, tagsOfScenario, argumentsOfScenario);
 #line 36
@@ -249,13 +255,15 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Add a User")]
         [NUnit.Framework.CategoryAttribute("smoketest")]
+        [NUnit.Framework.CategoryAttribute("admin")]
         [NUnit.Framework.TestCaseAttribute("55", "Leann", "Hope", null)]
         [NUnit.Framework.TestCaseAttribute("28", "Anita", "Lemon", null)]
         [NUnit.Framework.TestCaseAttribute("12", "Katja", "Fish", null)]
         public virtual void AddAUser(string userId, string firstName, string lastName, string[] exampleTags)
         {
             string[] @__tags = new string[] {
-                    "smoketest"};
+                    "smoketest",
+                    "admin"};
             if ((exampleTags != null))
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
@@ -305,10 +313,12 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Delete a User")]
         [NUnit.Framework.CategoryAttribute("smoketest")]
+        [NUnit.Framework.CategoryAttribute("admin")]
         public virtual void DeleteAUser()
         {
             string[] tagsOfScenario = new string[] {
-                    "smoketest"};
+                    "smoketest",
+                    "admin"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Delete a User", null, tagsOfScenario, argumentsOfScenario);
 #line 53

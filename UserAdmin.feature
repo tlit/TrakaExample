@@ -2,7 +2,7 @@
 	In order to administer Users of the system
 	I wish to perform operations on the User List
 
-@smoketest
+@smoketest @admin
 Scenario Outline: Return pages of the User List
 	When I request page <pageNumber> of the User List
 	Then the response code is 200
@@ -17,7 +17,7 @@ Examples:
 | 2          | 6       | 12         | 2          | 6         |
 | 200        | 6       | 12         | 2          | 0         |
 
-@smoketest
+@smoketest @admin
 Scenario Outline: Return a single User
 	When I request details for User ID <UserId>
 	Then the response code is 200
@@ -32,12 +32,12 @@ Examples:
 | 4      | Eve       | Holt     | eve.holt@reqres.in     |
 | 9      | Tobias    | Funke    | tobias.funke@reqres.in |
 
-@smoketest
+@smoketest @admin
 Scenario: Attempt to return an invalid User
 	When I request details for User ID 23
 	Then the response code is 404
 	
-@smoketest
+@smoketest @admin
 Scenario Outline: Add a User
 	When I add the User '<firstName> <lastName>'
 	Then the response code is 201
@@ -49,7 +49,7 @@ Examples:
 | 28		| Anita     | Lemon    |
 | 12		| Katja     | Fish     |
 
-@smoketest
+@smoketest @admin
 Scenario: Delete a User
 	When I delete User 23
 	Then the response code is 204

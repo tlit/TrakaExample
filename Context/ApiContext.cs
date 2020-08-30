@@ -1,6 +1,5 @@
 ﻿using System.Net.Http;
-using UserAdmin;
-using UserLogin;
+using TrakaExample.Models;
 
 namespace TrakaExample.Context
 {

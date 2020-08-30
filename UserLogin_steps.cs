@@ -6,28 +6,19 @@ using FluentAssertions;
 using System.Net;
 using System.Collections.Generic;
 using TrakaExample.Context;
+using TrakaExample.Models;
 
 namespace UserLogin
 {
-    public class LoginToken
-    {
-        public string token;
-    }
-
-    public class LoginError
-    {
-        public string error;
-    }
-
     [Binding]
     public class UserLogin_steps
     {
 
         static HttpClient client = new HttpClient();
         private readonly Uri baseUri = new Uri("https://reqres.in/api/");
-        private readonly TrakaExample.Context.ApiContext _apiContext;
+        private readonly ApiContext _apiContext;
 
-        public UserLogin_steps(TrakaExample.Context.ApiContext apiContext)
+        public UserLogin_steps(ApiContext apiContext)
         {
             this._apiContext = apiContext;
         }

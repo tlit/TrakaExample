@@ -3,45 +3,20 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using FluentAssertions;
-using System.Net;
 using System.Collections.Generic;
-using NUnit.Framework;
 using TrakaExample.Context;
+using TrakaExample.Models;
 
 namespace UserAdmin
 {
-
-    public class User
-    {
-        public int id;
-        public string email;
-        public string first_name;
-        public string last_name;
-        public string avatar;
-    }
-
-    public class UserListResponse
-    {
-        public int page;
-        public int per_page;
-        public int total;
-        public int total_pages;
-        public User[] data;
-    }
-
-    public class UserQueryResponse
-    {
-        public User data;
-    }
-
     [Binding]
     public class UserAdmin_steps
     {
         static HttpClient client = new HttpClient();
         private readonly Uri baseUri = new Uri("https://reqres.in/api/");
-        private readonly TrakaExample.Context.ApiContext _apiContext;
+        private readonly ApiContext _apiContext;
 
-        public UserAdmin_steps(TrakaExample.Context.ApiContext apiContext)
+        public UserAdmin_steps(ApiContext apiContext)
         {
             this._apiContext = apiContext;
         }
@@ -105,34 +80,6 @@ namespace UserAdmin
             string fullUri = $"{this.baseUri}{path}";
             HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Delete, fullUri);
             _apiContext.response = await client.SendAsync(msg);
-        }
-
-        [Then(@"the response code is (.*)")]
-        public void ThenTheResponseCodeIs(int responseCodeExpected)
-        {
-            HttpStatusCode statusCode = HttpStatusCode.OK;
-            switch (responseCodeExpected)
-            {
-                case 200:
-                    statusCode = HttpStatusCode.OK;
-                    break;
-                case 201:
-                    statusCode = HttpStatusCode.Created;
-                    break;
-                case 204:
-                    statusCode = HttpStatusCode.NoContent;
-                    break;
-                case 400:
-                    statusCode = HttpStatusCode.BadRequest;
-                    break;
-                case 404:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
-                case 500:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    break;
-            }
-            _apiContext.response.StatusCode.Should().Be(statusCode);
         }
 
         [Then(@"the response page is (.*)")]
