@@ -51,8 +51,6 @@ namespace ApiTestAutomation_01
             this.context = context;
         }
 
-
-
         [When(@"I request page (.*) of the User List")]
         public async Task WhenIRequestPageOfTheUserList(int pageNumber)
         {
@@ -105,8 +103,6 @@ namespace ApiTestAutomation_01
             }
         }
 
-
-
         [Then(@"the response code is (.*)")]
         public void ThenTheResponseCodeIs(int responseCodeExpected)
         {
@@ -156,13 +152,13 @@ namespace ApiTestAutomation_01
             context.userListResponse.total_pages.Should().Be(totalPagesExpected);
         }
 
-        [Then(@"the response data includes (.*) users")]
+        [Then(@"the response data includes (.*) Users")]
         public void ThenTheResponseDataIncludesUsers(int userCountExpected)
         {
             context.userListResponse.data.Length.Should().Be(userCountExpected);
         }
 
-        [Then(@"the response contains a single user")]
+        [Then(@"the response contains a single User")]
         public void ThenTheResponseContainsASingleUser()
         {
             context.userQueryResponse.data.Should().BeOfType<User>();
