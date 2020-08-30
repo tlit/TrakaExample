@@ -5,16 +5,11 @@ using TechTalk.SpecFlow;
 using FluentAssertions;
 using System.Net;
 using System.Collections.Generic;
+using NUnit.Framework;
+using TrakaExample.Context;
 
-namespace ApiTestAutomation_01
+namespace UserAdmin
 {
-    public class Context
-    {
-        public HttpResponseMessage response;
-        public User user;
-        public UserListResponse userListResponse;
-        public UserQueryResponse userQueryResponse;
-    }
 
     public class User
     {
@@ -40,15 +35,15 @@ namespace ApiTestAutomation_01
     }
 
     [Binding]
-    public class UserOperations_steps
+    public class UserAdmin_steps
     {
         static HttpClient client = new HttpClient();
         private readonly Uri baseUri = new Uri("https://reqres.in/api/");
-        private Context context;
-        
-        public UserOperations_steps(Context context)
+        private readonly TrakaExample.Context.ApiContext _apiContext;
+
+        public UserAdmin_steps(TrakaExample.Context.ApiContext apiContext)
         {
-            this.context = context;
+            this._apiContext = apiContext;
         }
 
         [When(@"I request page (.*) of the User List")]
@@ -56,10 +51,10 @@ namespace ApiTestAutomation_01
         {
             string path = $"users?page={pageNumber.ToString()}";
             string fullUri = $"{this.baseUri}{path}";
-            context.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
+            _apiContext.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
             try
             {
-                context.userListResponse = await context.response.Content.ReadAsAsync<UserListResponse>();
+                _apiContext.userListResponse = await _apiContext.response.Content.ReadAsAsync<UserListResponse>();
             }
             finally
             {
@@ -71,11 +66,11 @@ namespace ApiTestAutomation_01
         {
             string path = $"users/{userId}";
             string fullUri = $"{this.baseUri}{path}";
-            context.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
+            _apiContext.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
             try
             {
-                context.userQueryResponse = await context.response.Content.ReadAsAsync<UserQueryResponse>();
-                context.user = context.userQueryResponse.data;
+                _apiContext.userQueryResponse = await _apiContext.response.Content.ReadAsAsync<UserQueryResponse>();
+                _apiContext.user = _apiContext.userQueryResponse.data;
             }
             finally
             {
@@ -93,14 +88,23 @@ namespace ApiTestAutomation_01
                 new KeyValuePair<string, string>("first_name", firstName),
                 new KeyValuePair<string, string>("last_name", lastName),
             });
-            context.response = await client.SendAsync(msg);
+            _apiContext.response = await client.SendAsync(msg);
             try
             {
-                context.user = await context.response.Content.ReadAsAsync<User>();
+                _apiContext.user = await _apiContext.response.Content.ReadAsAsync<User>();
             }
             finally
             {
             }
+        }
+
+        [When(@"I delete User (.*)")]
+        public async Task WhenIDeleteUser(int userId)
+        {
+            string path = $"users/{userId}";
+            string fullUri = $"{this.baseUri}{path}";
+            HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Delete, fullUri);
+            _apiContext.response = await client.SendAsync(msg);
         }
 
         [Then(@"the response code is (.*)")]
@@ -115,6 +119,9 @@ namespace ApiTestAutomation_01
                 case 201:
                     statusCode = HttpStatusCode.Created;
                     break;
+                case 204:
+                    statusCode = HttpStatusCode.NoContent;
+                    break;
                 case 400:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
@@ -125,67 +132,67 @@ namespace ApiTestAutomation_01
                     statusCode = HttpStatusCode.InternalServerError;
                     break;
             }
-            context.response.StatusCode.Should().Be(statusCode);
+            _apiContext.response.StatusCode.Should().Be(statusCode);
         }
 
         [Then(@"the response page is (.*)")]
         public void ThenTheResponsePageIs(int pageNumberExpected)
         {
-            context.userListResponse.page.Should().Be(pageNumberExpected);
+            _apiContext.userListResponse.page.Should().Be(pageNumberExpected);
         }
 
         [Then(@"the response includes (.*) items per page")]
         public void ThenTheResponseIncludesItemsPerPage(int perPageExpected)
         {
-            context.userListResponse.per_page.Should().Be(perPageExpected);
+            _apiContext.userListResponse.per_page.Should().Be(perPageExpected);
         }
 
         [Then(@"the response indicates (.*) items in total")]
         public void ThenTheResponseIndicatesItemsInTotal(int totalExpected)
         {
-            context.userListResponse.total.Should().Be(totalExpected);
+            _apiContext.userListResponse.total.Should().Be(totalExpected);
         }
 
         [Then(@"the response indicates (.*) pages in total")]
         public void ThenTheResponseIndicatesPagesInTotal(int totalPagesExpected)
         {
-            context.userListResponse.total_pages.Should().Be(totalPagesExpected);
+            _apiContext.userListResponse.total_pages.Should().Be(totalPagesExpected);
         }
 
         [Then(@"the response data includes (.*) Users")]
         public void ThenTheResponseDataIncludesUsers(int userCountExpected)
         {
-            context.userListResponse.data.Length.Should().Be(userCountExpected);
+            _apiContext.userListResponse.data.Length.Should().Be(userCountExpected);
         }
 
         [Then(@"the response contains a single User")]
         public void ThenTheResponseContainsASingleUser()
         {
-            context.userQueryResponse.data.Should().BeOfType<User>();
+            _apiContext.userQueryResponse.data.Should().BeOfType<User>();
         }
 
         [Then(@"the User's first name is (.*)")]
         public void ThenTheUserSFirstNameIs(string firstNameExpected)
         {
-            context.user.first_name.Should().Be(firstNameExpected);
+            _apiContext.user.first_name.Should().Be(firstNameExpected);
         }
 
         [Then(@"the User's last name is (.*)")]
         public void ThenTheUserSLastNameIs(string lastNameExpected)
         {
-            context.user.last_name.Should().Be(lastNameExpected);
+            _apiContext.user.last_name.Should().Be(lastNameExpected);
         }
 
         [Then(@"the User's email address is (.*)")]
         public void ThenTheUserSEmailAddressIs(string emailExpected)
         {
-            context.user.email.Should().Be(emailExpected);
+            _apiContext.user.email.Should().Be(emailExpected);
         }
 
         [Then(@"the User's avatar is a valid URI")]
         public void ThenTheUserSAvatarIsAValidURI()
         {
-            Uri avatarUri = new Uri(context.user.avatar);
+            Uri avatarUri = new Uri(_apiContext.user.avatar);
             avatarUri.Should().BeOfType<Uri>();
         }
     }

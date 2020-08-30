@@ -1,4 +1,4 @@
-﻿Feature: UserOperations
+﻿Feature: UserAdmin
 	In order to administer Users of the system
 	I wish to perform operations on the User List
 
@@ -48,3 +48,8 @@ Examples:
 | 55		| Leann     | Hope     |
 | 28		| Anita     | Lemon    |
 | 12		| Katja     | Fish     |
+
+@smoketest
+Scenario: Delete a User
+	When I delete User 23
+	Then the response code is 204
