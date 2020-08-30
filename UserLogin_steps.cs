@@ -7,7 +7,7 @@ using System.Net;
 using System.Collections.Generic;
 using TrakaExample.Context;
 
-namespace TrakaExample
+namespace UserLogin
 {
     public class LoginToken
     {
@@ -31,7 +31,6 @@ namespace TrakaExample
         {
             this._apiContext = apiContext;
         }
-
 
         [When(@"I login using valid credentials")]
         public async Task WhenILoginUsingValidCredentials()
@@ -94,7 +93,6 @@ namespace TrakaExample
             {
             }
         }
-
 
         [Then(@"the response contains a token")]
         public void ThenTheResponseContainsAToken()
