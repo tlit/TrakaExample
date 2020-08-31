@@ -1,10 +1,7 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using FluentAssertions;
-using System.Net;
-using System.Collections.Generic;
 using TrakaExample.Context;
 using TrakaExample.Models;
 
@@ -15,7 +12,6 @@ namespace UserLogin
     {
 
         static HttpClient client = new HttpClient();
-        private readonly Uri baseUri = new Uri("https://reqres.in/api/");
         private readonly ApiContext _apiContext;
 
         public UserLogin_steps(ApiContext apiContext)
@@ -27,14 +23,13 @@ namespace UserLogin
         public async Task WhenILoginUsingValidCredentials()
         {
             string path = $"login";
-            string fullUri = $"{this.baseUri}{path}";
-            HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Post, fullUri);
-            msg.Content = new FormUrlEncodedContent(new[]
+            string fullUri = $"{_apiContext.baseUri}{path}";
+            User user = new User
             {
-                new KeyValuePair<string, string>("email", "george.bluth@reqres.in"),
-                new KeyValuePair<string, string>("password", "1234"),
-            });
-            _apiContext.response = await client.SendAsync(msg);
+                email = "george.bluth@reqres.in",
+                password = "1234"
+            };
+            _apiContext.response = await client.PostAsJsonAsync<User>(fullUri, user);
             try
             {
                 _apiContext.loginToken = await _apiContext.response.Content.ReadAsAsync<LoginToken>();
@@ -48,16 +43,15 @@ namespace UserLogin
         public async Task WhenILoginWithoutAPassword()
         {
             string path = $"login";
-            string fullUri = $"{this.baseUri}{path}";
-            HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Post, fullUri);
-            msg.Content = new FormUrlEncodedContent(new[]
+            string fullUri = $"{_apiContext.baseUri}{path}";
+            User user = new User
             {
-                new KeyValuePair<string, string>("email", "george.bluth@reqres.in")
-            });
-            _apiContext.response = await client.SendAsync(msg);
+                email = "george.bluth@reqres.in"
+            };
+            _apiContext.response = await client.PostAsJsonAsync<User>(fullUri, user);
             try
             {
-                _apiContext.loginError= await _apiContext.response.Content.ReadAsAsync<LoginError>();
+                _apiContext.loginError = await _apiContext.response.Content.ReadAsAsync<LoginError>();
             }
             finally
             {
@@ -68,14 +62,13 @@ namespace UserLogin
         public async Task WhenILoginUsingAnUnrecognisedUser()
         {
             string path = $"login";
-            string fullUri = $"{this.baseUri}{path}";
-            HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Post, fullUri);
-            msg.Content = new FormUrlEncodedContent(new[]
+            string fullUri = $"{_apiContext.baseUri}{path}";
+            User user = new User
             {
-                new KeyValuePair<string, string>("email", "unknown_user"),
-                new KeyValuePair<string, string>("password", "1234"),
-            });
-            _apiContext.response = await client.SendAsync(msg);
+                email = "unknown_user",
+                password = "1234"
+            };
+            _apiContext.response = await client.PostAsJsonAsync<User>(fullUri, user);
             try
             {
                 _apiContext.loginError = await _apiContext.response.Content.ReadAsAsync<LoginError>();

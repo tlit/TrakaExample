@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using FluentAssertions;
-using System.Collections.Generic;
 using TrakaExample.Context;
 using TrakaExample.Models;
 
@@ -25,7 +24,7 @@ namespace UserAdmin
         public async Task WhenIRequestPageOfTheUserList(int pageNumber)
         {
             string path = $"users?page={pageNumber.ToString()}";
-            string fullUri = $"{this.baseUri}{path}";
+            string fullUri = $"{_apiContext.baseUri}{path}";
             _apiContext.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
             try
             {
@@ -40,7 +39,7 @@ namespace UserAdmin
         public async Task WhenIRequestDetailsForUserID(int userId)
         {
             string path = $"users/{userId}";
-            string fullUri = $"{this.baseUri}{path}";
+            string fullUri = $"{_apiContext.baseUri}{path}";
             _apiContext.response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Get, fullUri));
             try
             {
@@ -56,14 +55,14 @@ namespace UserAdmin
         public async Task WhenIAddTheUser(string firstName, string lastName)
         {
             string path = $"users";
-            string fullUri = $"{this.baseUri}{path}";
+            string fullUri = $"{_apiContext.baseUri}{path}";
             HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Post, fullUri);
-            msg.Content = new FormUrlEncodedContent(new[]
+            User user = new User
             {
-                new KeyValuePair<string, string>("first_name", firstName),
-                new KeyValuePair<string, string>("last_name", lastName),
-            });
-            _apiContext.response = await client.SendAsync(msg);
+                first_name = firstName,
+                last_name = lastName
+            };
+            _apiContext.response = await client.PostAsJsonAsync<User>(fullUri, user);
             try
             {
                 _apiContext.user = await _apiContext.response.Content.ReadAsAsync<User>();
@@ -77,7 +76,7 @@ namespace UserAdmin
         public async Task WhenIDeleteUser(int userId)
         {
             string path = $"users/{userId}";
-            string fullUri = $"{this.baseUri}{path}";
+            string fullUri = $"{_apiContext.baseUri}{path}";
             HttpRequestMessage msg = new HttpRequestMessage(HttpMethod.Delete, fullUri);
             _apiContext.response = await client.SendAsync(msg);
         }
