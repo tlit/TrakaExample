@@ -82,6 +82,12 @@ namespace UserAdmin
             _apiContext.response = await client.SendAsync(msg);
         }
 
+        [Then(@"the response contains a single User")]
+        public void ThenTheResponseContainsASingleUser()
+        {
+            _apiContext.userQueryResponse.data.Should().BeOfType<User>();
+        }
+
         [Then(@"the response page is (.*)")]
         public void ThenTheResponsePageIs(int pageNumberExpected)
         {
@@ -110,12 +116,6 @@ namespace UserAdmin
         public void ThenTheResponseDataIncludesUsers(int userCountExpected)
         {
             _apiContext.userListResponse.data.Length.Should().Be(userCountExpected);
-        }
-
-        [Then(@"the response contains a single User")]
-        public void ThenTheResponseContainsASingleUser()
-        {
-            _apiContext.userQueryResponse.data.Should().BeOfType<User>();
         }
 
         [Then(@"the User's first name is (.*)")]
